@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Untuk Bunda 💖</title>
+<style>
+body{
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    background:linear-gradient(135deg,#ff758c,#ff7eb3);
+    color:white;
+    text-align:center;
+    overflow:hidden;
+}
+.slide{display:none;padding:60px 20px;animation:fade 0.5s ease;}
+@keyframes fade{from{opacity:0; transform:translateY(20px);}to{opacity:1; transform:translateY(0);}}
+.active{display:block;}
+button{padding:12px 25px;font-size:16px;border:none;border-radius:30px;cursor:pointer;margin:10px;}
+.primary{background:white;color:#ff4d6d;position:relative;}
+.danger{background:#ff1744;color:white;position:relative;}
+input{padding:10px;border-radius:20px;border:none;text-align:center;font-size:24px;}
+.falling{position:absolute;font-size:40px;cursor:pointer;}
+.bgheart{position:absolute;animation:fall linear infinite;pointer-events:none;}
+@keyframes fall{0%{transform:translateY(-10px);}100%{transform:translateY(100vh);}}
+#keypad button{font-size:20px;}
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1 -->
+<div class="slide active" id="slide1">
+    <h1>Bunda Sayang Aku Ga? 🥹💖</h1>
+    <button class="primary" id="yesBtn">Sayang Banget 💕</button>
+    <button class="danger" id="noBtn">Engga 😒</button>
+    <p id="yesCount" style="margin-top:20px;">Tekan tombol sayang 0 kali</p>
+</div>
+
+<!-- SLIDE 2: KEYPAD -->
+<div class="slide" id="slide2">
+    <h1>🔐 Masukkan Kode Rahasia</h1>
+    <p>Petunjuk: hal yang sama dari kita 💕</p>
+
+    <input type="text" id="kode" placeholder="Kode..." readonly>
+
+    <div id="keypad" style="display:grid; grid-template-columns: repeat(3, 60px); grid-gap:10px; justify-content:center; margin-top:20px;">
+        <button onclick="pressKey('1')">1</button>
+        <button onclick="pressKey('2')">2</button>
+        <button onclick="pressKey('3')">3</button>
+        <button onclick="pressKey('4')">4</button>
+        <button onclick="pressKey('5')">5</button>
+        <button onclick="pressKey('6')">6</button>
+        <button onclick="pressKey('7')">7</button>
+        <button onclick="pressKey('8')">8</button>
+        <button onclick="pressKey('9')">9</button>
+        <button onclick="clearKey()">C</button>
+        <button onclick="pressKey('0')">0</button>
+        <button onclick="submitKey()">OK</button>
+    </div>
+    <p id="kodeResult"></p>
+</div>
+
+<!-- SLIDE 3: TEKA TEKI -->
+<div class="slide" id="slide3">
+    <h1>Teka-Teki 🤔</h1>
+    <p>
+    Aku tidak terlihat tapi terasa.<br>
+    Aku menguatkan tanpa disentuh.<br>
+    Aku tumbuh karena ketulusan.<br><br>
+    Aku apa?
+    </p>
+    <input id="answer" placeholder="Jawaban...">
+    <br>
+    <button class="primary" onclick="checkAnswer()">Jawab 💌</button>
+    <p id="result"></p>
+</div>
+
+<!-- SLIDE 4: GAME HATI -->
+<div class="slide" id="slide4">
+    <h1>Game Tangkap Hati 💖</h1>
+    <p>Klik 5 hati merah! Jangan klik yang hitam 😈</p>
+    <h2 id="score">0 / 5</h2>
+</div>
+
+<!-- SLIDE 5: SURAT -->
+<div class="slide" id="slide5">
+    <h1>Untuk Bunda Tercinta 💖</h1>
+    <p style="max-width:700px;margin:auto;line-height:1.8;">
+    Bunda tersayang 🤍<br><br>
+    Terima kasih atas doa dan cinta yang selalu ada untukku.<br>
+    bundaaa Jangan pergii yaaa.<br><br>
+    Terima kasih selalu ada untukku, menyayangiku tanpa syarat, dan membuat hidupku lebih indah. Aku sangat bersyukur punya Bunda. Semoga hari ini Bunda bahagia, tersenyum, dan merasakan betapa besar cintaku padamu.<br><br>
+    Aku sayang Bunda selamanya 💕
+    </p>
+</div>
+
+<script>
+let currentSlide = 1;
+let score = 0;
+let gameInterval;
+let yesPressCount = 0;
+
+// Slide navigasi
+function nextSlide(n){
+    document.getElementById("slide"+currentSlide).classList.remove("active");
+    currentSlide = n;
+    document.getElementById("slide"+currentSlide).classList.add("active");
+    if(n===4) startGame();
+}
+
+// Tombol Engga kabur
+document.getElementById("noBtn").addEventListener("mouseover",function(){
+    this.style.position="absolute";
+    this.style.left=Math.random()*80+"%";
+    this.style.top=Math.random()*80+"%";
+});
+
+// Tombol Sayang Banget pindah-pindah dan count
+const yesBtn = document.getElementById("yesBtn");
+const yesCountText = document.getElementById("yesCount");
+yesBtn.addEventListener("mouseover", moveYesButton);
+yesBtn.addEventListener("click", function(){
+    yesPressCount++;
+    yesCountText.innerText = "Tekan tombol sayang " + yesPressCount + " kali";
+    if(yesPressCount>=10){
+        nextSlide(2);
+    }
+});
+
+function moveYesButton(){
+    yesBtn.style.position="absolute";
+    yesBtn.style.left=Math.random()*80+"%";
+    yesBtn.style.top=Math.random()*80+"%";
+}
+
+// KEYPAD
+function pressKey(num){
+    let input=document.getElementById("kode");
+    if(input.value.length<6) input.value += num;
+}
+function clearKey(){
+    document.getElementById("kode").value = "";
+}
+function submitKey(){
+    let kode=document.getElementById("kode").value;
+    if(kode==="2007"){
+        document.getElementById("kodeResult").innerHTML="Kode benar 💖";
+        setTimeout(()=>nextSlide(3),1500);
+    } else {
+        document.getElementById("kodeResult").innerHTML="Kode salah 😈 coba lagi";
+        clearKey();
+    }
+}
+
+// TEKA TEKI
+function checkAnswer(){
+    let ans=document.getElementById("answer").value.toLowerCase().trim();
+    if(ans==="cinta"){
+        document.getElementById("result").innerHTML="Benar banget 🥹💖";
+        setTimeout(()=>nextSlide(4),1500);
+    } else{
+        document.getElementById("result").innerHTML="Hehe salah 😝 coba lagi yaa";
+    }
+}
+
+// GAME HATI DENGAN HATI PALSU
+function startGame(){
+    score=0;
+    document.getElementById("score").innerHTML="0 / 5";
+    gameInterval=setInterval(createHeart,700);
+}
+
+function createHeart(){
+    const heart=document.createElement("div");
+    heart.classList.add("falling");
+    let isFake=Math.random()<0.4;
+    heart.innerHTML=isFake?"🖤":"💖";
+    heart.style.left=Math.random()*(window.innerWidth-50)+"px";
+    heart.style.top=Math.random()*(window.innerHeight-150)+"px";
+    heart.onclick=function(){
+        if(isFake) score=Math.max(0,score-1);
+        else score++;
+        document.getElementById("score").innerHTML=score+" / 5";
+        heart.remove();
+        if(score>=5){
+            clearInterval(gameInterval);
+            setTimeout(()=>nextSlide(5),1000);
+        }
+    };
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),1500);
+}
+
+// HUJAN HATI BACKGROUND
+function backgroundHearts(){
+    setInterval(()=>{
+        const bg=document.createElement("div");
+        bg.classList.add("bgheart");
+        bg.innerHTML="💗";
+        bg.style.left=Math.random()*window.innerWidth+"px";
+        bg.style.animationDuration=(Math.random()*3+2)+"s";
+        document.body.appendChild(bg);
+        setTimeout(()=>bg.remove(),5000);
+    },400);
+}
+backgroundHearts();
+</script>
+
+</body>
+</html>
